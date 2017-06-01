@@ -13,6 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<start-class>eu.openminted.workflowservice.rest.server.Starter</start-class>
 	</properties>
 	
     <parent>
@@ -75,16 +76,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-					<executions>
-				    <execution>
-				      <goals>
-				        <goal>repackage</goal>
-				      </goals>
-				      <configuration>
-				        <classifier>exec</classifier>
-				      </configuration>
-				    </execution>
-				  </executions>
+                <configuration>
+                	<executable>true</executable>                	
+                </configuration>
 			</plugin>
 			
 		</plugins>

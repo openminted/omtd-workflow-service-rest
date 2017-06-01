@@ -37,6 +37,7 @@ public class WorkflowServiceController {
     	
     	log.info("wid:" + wid + " corpusId:" + corpusId);
     	String ret = null;
+    	
     	try{
 			MetadataIdentifier metadataId = new MetadataIdentifier();
 			metadataId.setValue(wid);
@@ -49,7 +50,8 @@ public class WorkflowServiceController {
 			
 			
 	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId);
-	    	ret = workflowService.execute(workflowJob);
+	    	log.info("execute->");
+	    	//ret = workflowService.execute(workflowJob);
 	    	return ret;
     	}catch (Exception e){
     		return ret;
