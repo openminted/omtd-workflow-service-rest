@@ -51,7 +51,7 @@ public class WorkflowServiceController {
 			
 	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId);
 	    	log.info("execute->");
-	    	//ret = workflowService.execute(workflowJob);
+	    	ret = workflowService.execute(workflowJob);
 	    	return ret;
     	}catch (Exception e){
     		return ret;
