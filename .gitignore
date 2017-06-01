@@ -1,0 +1,15 @@
+/.settings
+/.project
+/bin/
+/omtd-workflow-service-rest-client/.classpath
+/omtd-workflow-service-rest-client/.settings
+/omtd-workflow-service-rest-client/.project
+/omtd-workflow-service-rest-common/.project
+/omtd-workflow-service-rest-common/.settings
+/omtd-workflow-service-rest-common/target
+/omtd-workflow-service-rest-common/.classpath
+/omtd-workflow-service-rest-server/.gitignore
+/omtd-workflow-service-rest-server/.settings
+/omtd-workflow-service-rest-server/.classpath
+/omtd-workflow-service-rest-server/.project
+/omtd-workflow-service-rest-server/target
