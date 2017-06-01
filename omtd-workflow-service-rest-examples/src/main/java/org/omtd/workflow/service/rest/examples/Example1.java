@@ -1,6 +1,10 @@
 package org.omtd.workflow.service.rest.examples;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +20,10 @@ public class Example1 {
         
 	private static final Logger log = LoggerFactory.getLogger(Example1.class);
 	
+	// DG
     public static String uploadDataToStoreArchive(String endpoint, String folderWithPDFs){
 		StoreRESTClient store = new StoreRESTClient(endpoint);
+		
 		
 		String archiveID = store.createArchive().getResponse();
 		log.info("Create Archive:" + archiveID);
@@ -35,18 +41,45 @@ public class Example1 {
 		
 		return archiveID;
 	}
+	
+    // Mark G.
+    private static String uploadArchive(StoreRESTClient storeClient, Path archiveData) throws IOException {
+		String archiveID = storeClient.createArchive().getResponse();
+		String annotationsFolderId = storeClient.createSubArchive(archiveID, "fulltext").getResponse();
+
+		Files.walk(archiveData).filter(path -> !Files.isDirectory(path)).forEach(path -> {
+			storeClient.storeFile(path.toFile(), annotationsFolderId, path.getFileName().toString());
+		});
+
+		storeClient.finalizeArchive(archiveID);
+
+		return archiveID;
+	}
     
     // Main
     // ---
     // ---
     public static void main( String[] args ){
     	
-    	String storeEndpoint = "http://localhost:8080/";
-    	String folderWithPDFs = "C:/Users/galanisd/Desktop/Dimitris/EclipseWorkspaces/ILSPMars/omtd-simple-workflows/testInput/";
-    	String archiveID = uploadDataToStoreArchive(storeEndpoint, folderWithPDFs);
+    	try{
+    		String storeEndpoint = "http://localhost:8080/";
+    		String folderWithPDFs = "C:/Users/galanisd/Desktop/Dimitris/EclipseWorkspaces/ILSPMars/omtd-simple-workflows/testInput/";
     	
-    	WorkflowServiceClient client = new WorkflowServiceClient("http://localhost:8881/");
-    	String id = client.executeJob("DGTest1", archiveID);
-    	log.info("id:" + id);
+    		// DG
+    		//String archiveID = uploadDataToStoreArchive(storeEndpoint, folderWithPDFs);
+    		//Mark
+    		Path archiveData = Paths.get(folderWithPDFs);
+    		String archiveID = uploadArchive(new StoreRESTClient(storeEndpoint), archiveData);
+    	
+    		WorkflowServiceClient client = new WorkflowServiceClient("http://localhost:8881/");
+    		String id = client.executeJob("DGTest1", archiveID);
+    		log.info("id:" + id);
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
     }
+    
+    
+
+    
 }
