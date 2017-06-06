@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import com.github.jmchilton.blend4j.galaxy.beans.WorkflowOutputs;
 import com.github.jmchilton.blend4j.galaxy.beans.WorkflowStepDefinition;
 import com.github.jmchilton.blend4j.galaxy.beans.collection.request.CollectionDescription;
 import com.github.jmchilton.blend4j.galaxy.beans.collection.request.HistoryDatasetElement;
+import com.github.jmchilton.blend4j.galaxy.beans.collection.response.CollectionElementResponse;
 import com.github.jmchilton.blend4j.galaxy.beans.collection.response.CollectionResponse;
 import com.google.common.collect.Lists;
 
@@ -63,11 +65,11 @@ public class Galaxy {
 				File PDFs[] = dir.listFiles();
 				ArrayList<File> filesList = new ArrayList<File>(Arrays.asList(PDFs));
 
-				log.info("started history population");
+				log.info("Started history population");
 				List<String> inputIds = populateHistory(historyID, filesList);
-				log.info("populated history");
-				CollectionResponse collectionResponse = constructFileCollectionList(historyID, inputIds);
-				log.info("created file collection");
+				log.info("Populated history");
+				CollectionResponse collectionResponse = constructFileCollectionList(historyID, inputIds, filesList);
+				log.info("Created file collection");
 				
 				log.info(workflowId + "->" + hasWorkflow);
 				WorkflowDetails workflowDetails = workflowsClient.showWorkflow(hasWorkflow);
@@ -110,19 +112,20 @@ public class Galaxy {
 		}
 	}
 
-	private CollectionResponse constructFileCollectionList(String historyId, List<String> inputIds) {
+	private CollectionResponse constructFileCollectionList(String historyId, List<String> inputIds, List<File> files) {
 		HistoriesClient historiesClient = galaxyInstance.getHistoriesClient();
 
 		CollectionDescription collectionDescription = new CollectionDescription();
 		collectionDescription.setCollectionType("list");
-		collectionDescription.setName("collection");
+		collectionDescription.setName(historyId + "collection");
 		//collectionDescription.setType("pdf");
 
+		int i = 0;
 		for (String inputId : inputIds) {
 			HistoryDatasetElement element = new HistoryDatasetElement();
 			element.setId(inputId);
-			//element.setName(inputId);
-
+			element.setName(files.get(i).getName());
+			i++;
 			collectionDescription.addDatasetElement(element);
 		}
 
@@ -209,8 +212,9 @@ public class Galaxy {
 	      final String stepId = entry.getKey();
 	      
 	      if(stepId.equalsIgnoreCase("1")){
-	    	    inputs.setToolParameter(stepId, "Workflow ID", "eu.openminted.simplewokflows.dkpro.PipelinePDFToXMI");
-	    	    log.info(stepId + " parameter has been set");
+	    	    //inputs.setToolParameter(stepId, "Workflow ID", "eu.openminted.simplewokflows.dkpro.PipelinePDFToXMI");
+	    	    //inputs.setStepParameter(stepId, "Workflow ID", "eu.openminted.simplewokflows.dkpro.PipelinePDFToXMI");  
+	    	  log.info(stepId + " parameter has been set");
 	      }
 	    }
 	}
@@ -227,7 +231,7 @@ public class Galaxy {
 	      log.info(stepId + " " + stepDef.getType() + " "  /*stepDef.toString()*/);
 	      
 	      for(final Map.Entry<String, WorkflowStepDefinition.WorkflowStepOutput> stepInput : stepDef.getInputSteps().entrySet()) {
-	    	  log.info("Parameters " + stepInput.getKey() + "-" + stepInput.getValue() + "-" + /*stepInput.toString()*/  "\n");    
+	    	  log.info("Parameter " + stepInput.getKey() + "-" + stepInput.getValue() + "-" + /*stepInput.toString()*/  "\n");    
 	      }
 	      
 	    }
@@ -249,8 +253,26 @@ public class Galaxy {
 
 		// download this output into the local file
 		try {
-			historiesClient.downloadDataset(output.getHistoryId(), outputId, outputFile);
-		} catch (IOException e) {
+			//historiesClient.downloadDataset(output.getHistoryId(), outputId, outputFile);
+			
+			List<HistoryContents> hc = historiesClient.showHistoryContents(output.getHistoryId());
+			for(final HistoryContents element : hc) {
+				log.info(element.getId() + "|" + element.getName() + "|" + element.getHistoryContentType());
+				
+				if("Produce XML files".equalsIgnoreCase(element.getName())){
+					CollectionResponse cr = historiesClient.showDatasetCollection(output.getHistoryId(), element.getId());
+					
+					log.info("size:" +  cr.getElements().size() );
+					
+					Iterator<CollectionElementResponse> it = cr.getElements().iterator();
+					while(it.hasNext()){
+						CollectionElementResponse resp = it.next();
+						log.info(resp.getId());
+					}
+					//cr.
+				}
+			}
+		} catch (Exception e) {
 			// if we can't download the file then we have a
 			// problem....
 			log.error("Unable to download result from Galaxy history", e);
