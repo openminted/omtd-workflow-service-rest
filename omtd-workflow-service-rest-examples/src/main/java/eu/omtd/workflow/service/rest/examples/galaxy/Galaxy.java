@@ -1,4 +1,4 @@
-package org.omtd.workflow.service.rest.examples.galaxy;
+package eu.omtd.workflow.service.rest.examples.galaxy;
 
 import java.io.File;
 import java.io.IOException;

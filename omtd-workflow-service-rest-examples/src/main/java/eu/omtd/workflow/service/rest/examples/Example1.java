@@ -1,4 +1,4 @@
-package org.omtd.workflow.service.rest.examples;
+package eu.omtd.workflow.service.rest.examples;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class Example1 {
     	
     	try{
     		String storeEndpoint = "http://localhost:8080/";
-    		String folderWithPDFs = "C:/Users/galanisd/Desktop/Dimitris/EclipseWorkspaces/ILSPMars/omtd-simple-workflows/testInput/";
+    		String folderWithPDFs = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
     	
     		// DG
     		//String archiveID = uploadDataToStoreArchive(storeEndpoint, folderWithPDFs);
