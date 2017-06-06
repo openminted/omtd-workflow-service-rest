@@ -55,9 +55,8 @@ public class Galaxy {
 		historiesClient = galaxyInstance.getHistoriesClient();
 	}
 
-	public void runWorkflow(String inputData, String workflowId) {
-		try {
-			WorkflowInputs.InputSourceType inputSource = WorkflowInputs.InputSourceType.HDCA;
+	public void runWorkflow(String inputData, String workflowId, String outputPAth) {
+		try {			
 			String hasWorkflow = ensureHasWorkflow(workflowId);
 			if (hasWorkflow != null) {
 				String historyID = createHistory(Galaxy.class.getName() + "-" + new Date());
@@ -71,38 +70,10 @@ public class Galaxy {
 				CollectionResponse collectionResponse = constructFileCollectionList(historyID, inputIds, filesList);
 				log.info("Created file collection");
 				
-				log.info(workflowId + "->" + hasWorkflow);
-				WorkflowDetails workflowDetails = workflowsClient.showWorkflow(hasWorkflow);
-
-				//String workflowInputId = getWorkflowInputId(workflowDetails, "input_list");
-				String workflowInputId = getWorkflowInputId(workflowDetails, "Input Dataset Collection");
-
-				WorkflowInputs workflowInputs = new WorkflowInputs();
-				workflowInputs.setDestination(new WorkflowInputs.ExistingHistory(historyID));
-				workflowInputs.setWorkflowId(hasWorkflow);
-				workflowInputs.setInput(workflowInputId,
-						new WorkflowInputs.WorkflowInput(collectionResponse.getId(), inputSource));
-
-				setParameters(workflowInputs);
-				printDetails(workflowInputs);
-				log.info("Run workflow");
-				final WorkflowOutputs output = workflowsClient.runWorkflow(workflowInputs);
-				log.info("Workflow started");
-				
-				log.info("Waiting");
-				// make sure the workflow has finished and the history is in
-				// the "ok" state before proceeding any further
-				try {
-					waitForHistory(output.getHistoryId());
-				} catch (InterruptedException e) {
-					// hmmmm that will mess things up
-					log.error("Interrupted waiting for a valid Galaxy history", e);
-					//status.put(workflowExecutionId, new ExecutionStatus(e));
-					return;
-				}
+				WorkflowOutputs output = run(workflowId, hasWorkflow, collectionResponse, historyID);
 
 				log.info("Download");
-				download(output, "/home/ilsp/Desktop/");
+				download(output, outputPAth);
 				log.info("Downloaded");
 			} else {
 				log.info("Workflow " + workflowId + " does not exist");
@@ -112,6 +83,44 @@ public class Galaxy {
 		}
 	}
 
+	private WorkflowOutputs run(String workflowId, String hasWorkflow, CollectionResponse collectionResponse, String historyID){
+		WorkflowOutputs output = null;
+		
+		WorkflowInputs.InputSourceType inputSource = WorkflowInputs.InputSourceType.HDCA;
+		log.info(workflowId + "->" + hasWorkflow);
+		WorkflowDetails workflowDetails = workflowsClient.showWorkflow(hasWorkflow);
+
+		//String workflowInputId = getWorkflowInputId(workflowDetails, "input_list");
+		String workflowInputId = getWorkflowInputId(workflowDetails, "Input Dataset Collection");
+
+		WorkflowInputs workflowInputs = new WorkflowInputs();
+		workflowInputs.setDestination(new WorkflowInputs.ExistingHistory(historyID));
+		workflowInputs.setWorkflowId(hasWorkflow);
+		workflowInputs.setInput(workflowInputId,
+				new WorkflowInputs.WorkflowInput(collectionResponse.getId(), inputSource));
+
+		setParameters(workflowInputs);
+		printDetails(workflowInputs);
+		log.info("Run workflow");
+		output = workflowsClient.runWorkflow(workflowInputs);
+		log.info("Workflow started");
+		
+		log.info("Waiting");
+		// make sure the workflow has finished and the history is in
+		// the "ok" state before proceeding any further
+		try {
+			//waitForHistory(output.getHistoryId());
+			waitForHistory(historyID);			
+		} catch (InterruptedException e) {
+			// hmmmm that will mess things up
+			log.error("Interrupted waiting for a valid Galaxy history", e);
+			//status.put(workflowExecutionId, new ExecutionStatus(e));
+			return output;
+		}
+		
+		return output;
+	}
+	
 	private CollectionResponse constructFileCollectionList(String historyId, List<String> inputIds, List<File> files) {
 		HistoriesClient historiesClient = galaxyInstance.getHistoriesClient();
 
@@ -239,7 +248,12 @@ public class Galaxy {
 	}
 	
 	private void download(WorkflowOutputs output, String path){
-
+		try{
+			Thread.sleep(30000L);
+		}catch(Exception e){
+			
+		}
+		
 		for(final String outputId : output.getOutputIds()) {
 		      System.out.println("  Workflow Output ID " + outputId);
 		}
@@ -247,30 +261,41 @@ public class Galaxy {
 		String outputId = output.getOutputIds().get(output.getOutputIds().size() - 1);
 		log.info("outputId:" + outputId);
 		
-		// create a local file in which to store a copy of the
-		// output
-		File outputFile = new File(path, outputId);
-
 		// download this output into the local file
 		try {
-			//historiesClient.downloadDataset(output.getHistoryId(), outputId, outputFile);
+			
 			
 			List<HistoryContents> hc = historiesClient.showHistoryContents(output.getHistoryId());
 			for(final HistoryContents element : hc) {
 				log.info(element.getId() + "|" + element.getName() + "|" + element.getHistoryContentType());
 				
+				File f = new File(path);
+				if(!f.exists()){
+					f.mkdirs();
+				}
+				File outputFile = new File(path + element.getName());
+				
+				if(element.getHistoryContentType().equalsIgnoreCase("dataset")){
+					historiesClient.downloadDataset(output.getHistoryId(), element.getId(), outputFile);
+				}
+				
+				/*
 				if("Produce XML files".equalsIgnoreCase(element.getName())){
+					
 					CollectionResponse cr = historiesClient.showDatasetCollection(output.getHistoryId(), element.getId());
 					
 					log.info("size:" +  cr.getElements().size() );
 					
 					Iterator<CollectionElementResponse> it = cr.getElements().iterator();
-					while(it.hasNext()){
+					while(it.hasNext()){						
 						CollectionElementResponse resp = it.next();
-						log.info(resp.getId());
+						log.info("--- " + resp.getId() + " " + resp.getElementType());
+						File outputFile = new File(path, resp.getId());
+						outputFile.mkdirs();
+						historiesClient.downloadDataset(output.getHistoryId(), resp.getId(), outputFile);
 					}
 					//cr.
-				}
+				}*/
 			}
 		} catch (Exception e) {
 			// if we can't download the file then we have a
