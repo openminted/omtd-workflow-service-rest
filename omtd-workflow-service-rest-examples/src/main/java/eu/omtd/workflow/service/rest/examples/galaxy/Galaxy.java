@@ -174,6 +174,7 @@ public class Galaxy {
 		return execution.getOutputs().get(0);
 	}
 
+	/*
 	private void waitForHistory(final String historyId) throws InterruptedException {
 		HistoryDetails details = null;
 		while (true) {
@@ -197,8 +198,50 @@ public class Galaxy {
 			throw new RuntimeException(message);
 		}
 		Thread.sleep(200L);
-	}
+	}*/
+	
+	private void waitForHistory(final String historyId) throws InterruptedException {
 
+		// a placeholder for the current details of the history
+		HistoryDetails details = null;
+
+		// wait until the history is in the ready state
+		while (true) {
+			details = historiesClient.showHistory(historyId);
+			if (details.isReady()) {
+				break;
+			}
+
+			// don't hammer the galaxy instance to heavily
+			Thread.sleep(200L);
+		}
+
+		// get the state of the history
+		final String state = details.getState();
+		Thread.sleep(200L);
+
+		// if the history is in an ok state then we can return
+		if (state.equals("ok"))
+			return;
+
+		for (HistoryContents content : historiesClient.showHistoryContents(historyId)) {
+			if (!content.getState().equals("ok")) {
+				// if one of the history contents is in a failed state throw the
+				// associated error
+				HistoryContentsProvenance provenance = historiesClient.showProvenance(historyId, content.getId());
+				final String standardError = provenance.getStandardError().replace("\n", "");
+				final String message = "History no longer running, but not in 'ok' state. Found content in error with standard error "
+						+ standardError;
+				throw new RuntimeException(message);
+			}
+		}
+
+		// throw a slightly more generic error message simply reporting the
+		// state of the entire history
+		throw new RuntimeException("History no longer running, but not in 'ok' state. State is - " + state);
+
+	}
+	
 	private String getWorkflowInputId(WorkflowDetails workflowDetails, String inputLabel) {
 		String workflowInputId = null;
 
@@ -228,7 +271,6 @@ public class Galaxy {
 	    }
 	}
 	
-	
 	private void printDetails(WorkflowInputs inputs){
 		final WorkflowDetails workflowDetails = workflowsClient.showWorkflow(inputs.getWorkflowId());
 	    //workflowDetails.getInputs();
@@ -248,8 +290,9 @@ public class Galaxy {
 	}
 	
 	private void download(WorkflowOutputs output, String path){
+		
 		try{
-			Thread.sleep(30000L);
+			Thread.sleep(120000L);
 		}catch(Exception e){
 			
 		}
