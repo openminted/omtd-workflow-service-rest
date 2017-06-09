@@ -62,10 +62,14 @@ public class Example1 {
     public static void main( String[] args ){
     	
     	try{
-    		String storeEndpoint = "http://localhost:8080/";
-    		//String storeEndpoint = "http://83.212.101.85:8090";
-    		String workflowEndpoint = "http://localhost:8881/";
-    		//String workflowEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8881/";
+    		// --- Choose storeEndpoint.
+    		//String storeEndpoint = "http://localhost:8080/";
+    		//String storeEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8888/";
+    		String storeEndpoint = "http://83.212.101.85:8090";
+
+    		// --- Choose workflowEndpoint.
+    		//String workflowEndpoint = "http://localhost:8881/";    		    		
+    		String workflowEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8881/";    		
     		
     		//String folderWithPDFs = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
     		String folderWithPDFs = "C:/Users/galanisd/Desktop/smallPDFs/";
