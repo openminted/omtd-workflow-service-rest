@@ -45,6 +45,13 @@ public class WorkflowServiceClient {
 		return post(destination(endpoint, WorkFlowREST.executeJob), params);
 	}
 	
+	public String getStatus(String jobID) {
+		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
+		params.add(WorkFlowREST.jobID, jobID);		
+		
+		return post(destination(endpoint, WorkFlowREST.getStatus), params);
+	}
+	
 	private String post(String serviceEndpoint, MultiValueMap<String, Object> map){
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();

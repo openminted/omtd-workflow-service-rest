@@ -55,6 +55,21 @@ public class WorkflowServiceController {
 	    	return ret;
     	}catch (Exception e){
     		return ret;
+    	}   	
+    }
+    
+    @RequestMapping(value=WorkFlowREST.getStatus, method=RequestMethod.POST)
+    @ResponseBody
+    public String getStatus(@RequestParam(WorkFlowREST.jobID) String jobID){
+    	
+    	log.info("jobID:" + jobID);
+    	String ret = null;
+    	
+    	try{
+    		ret = workflowService.getExecutionStatus(jobID).getStatus().toString();
+	    	return ret;
+    	}catch (Exception e){
+    		return ret;
     	}
     	
     }
