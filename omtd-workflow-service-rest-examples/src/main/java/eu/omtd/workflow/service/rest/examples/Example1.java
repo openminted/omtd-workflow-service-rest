@@ -62,7 +62,11 @@ public class Example1 {
     public static void main( String[] args ){
     	
     	try{
-    		String storeEndpoint = "http://localhost:8080/";
+    		//String storeEndpoint = "http://localhost:8080/";
+    		String storeEndpoint = "83.212.101.85:8090";
+    		//String workflowEndpoint = "http://localhost:8881/";
+    		String workflowEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8881/";
+    		
     		//String folderWithPDFs = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
     		String folderWithPDFs = "C:/Users/galanisd/Desktop/smallPDFs/";
     		
@@ -71,17 +75,21 @@ public class Example1 {
     		//Mark
     		Path archiveData = Paths.get(folderWithPDFs);
     		String archiveID = uploadArchive(new StoreRESTClient(storeEndpoint), archiveData);    	
-    		log.info("Data uploaded to STORE");	
+    		log.info("Data uploaded to STORE " + storeEndpoint);	
     		
-    		WorkflowServiceClient client = new WorkflowServiceClient("http://localhost:8881/");
+    		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);    		    		
+    		
     		String id = client.executeJob("DGTest1", archiveID);
+    		//String id = client.executeJob("funding-mining", archiveID);
+    		//String id = client.executeJob("Datacite", archiveID);
+    		
     		log.info("id:" + id);
     	}catch(Exception e){
     		e.printStackTrace();
     	}
     }
     
-    
+    	
 
     
 }
