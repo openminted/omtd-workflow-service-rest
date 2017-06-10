@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.openminted.store.restclient.StoreRESTClient;
+import eu.openminted.workflow.api.ExecutionStatus;
 import eu.openminted.workflowservice.rest.client.WorkflowServiceClient;
 
 /**
@@ -80,6 +81,11 @@ public class Example1 {
     		//String downloadPath = "C:/Users/galanisd/Desktop/data.zip";
     		String downloadPath = "/home/ilsp/Desktop/data.zip";
     		
+    		// --- Seelct workflow
+    		//String wid = "funding-mining";
+    		//String wid = "Datacite";
+    		String wid = "DGTest1";
+    		
     		// DG
     		//String archiveID = uploadDataToStoreArchive(storeEndpoint, folderWithPDFs);
     		//Mark
@@ -91,12 +97,17 @@ public class Example1 {
     		
     		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);    		    		
     		
-    		String jobID = client.executeJob("DGTest1", archiveID);
+    		String jobID = client.executeJob(wid, archiveID);
     		log.info("jobID:" + jobID);
     		
-    		log.info(client.getStatus(jobID));
-    		//String id = client.executeJob("funding-mining", archiveID);
-    		//String id = client.executeJob("Datacite", archiveID);
+    		String status = client.getStatus(jobID);
+    		log.info("status:" + status);
+
+    		while(!isCompleted(status)){
+    			Thread.currentThread().sleep(5000);
+    			status = client.getStatus(jobID);
+    			log.info("status:" + status);
+    		}
     		
     		
     	}catch(Exception e){
@@ -104,7 +115,13 @@ public class Example1 {
     	}
     }
     
-    	
+    public static boolean isCompleted(String status){
+		boolean completed = status.equalsIgnoreCase(ExecutionStatus.Status.FINISHED.toString()) ||
+				status.equalsIgnoreCase(ExecutionStatus.Status.FAILED.toString()) ||
+				status.equalsIgnoreCase(ExecutionStatus.Status.CANCELED.toString());
+		
+		return completed; 
+    }
 
     
 }
