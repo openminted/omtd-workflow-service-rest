@@ -71,8 +71,14 @@ public class Example1 {
     		//String workflowEndpoint = "http://localhost:8881/";    		    		
     		String workflowEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8881/";    		
     		
+    		// --- Choose input
     		//String folderWithPDFs = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
-    		String folderWithPDFs = "C:/Users/galanisd/Desktop/smallPDFs/";
+    		//String folderWithPDFs = "C:/Users/galanisd/Desktop/smallPDFs/";
+    		String folderWithPDFs = "/home/ilsp/Desktop/smallPDFs/";
+    		
+    		// --- 
+    		//String downloadPath = "C:/Users/galanisd/Desktop/data.zip";
+    		String downloadPath = "/home/ilsp/Desktop/data.zip";
     		
     		// DG
     		//String archiveID = uploadDataToStoreArchive(storeEndpoint, folderWithPDFs);
@@ -81,7 +87,7 @@ public class Example1 {
     		StoreRESTClient store = new StoreRESTClient(storeEndpoint);
     		String archiveID = uploadArchive(store, archiveData);    	
     		log.info("Data uploaded to STORE " + storeEndpoint + " " + archiveID);
-    		store.downloadArchive(archiveID, "C:/Users/galanisd/Desktop/data.zip");
+    		store.downloadArchive(archiveID, downloadPath);
     		
     		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);    		    		
     		
