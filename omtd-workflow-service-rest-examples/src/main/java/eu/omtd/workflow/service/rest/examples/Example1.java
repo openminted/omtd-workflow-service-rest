@@ -73,23 +73,28 @@ public class Example1 {
     		String workflowEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8881/";    		
     		
     		// --- Choose input
-    		//String folderWithPDFs = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
-    		//String folderWithPDFs = "C:/Users/galanisd/Desktop/smallPDFs/";
-    		String folderWithPDFs = "/home/ilsp/Desktop/smallPDFs/";
+    		//String inFolder = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
+    		//String inFolder = "C:/Users/galanisd/Desktop/smallPDFs/";
+    		String inFolder = "/home/ilsp/Desktop/smallPDFs/";
+    		//String inFolder = "/home/ilsp/Desktop/TextFiles/";
     		
     		// --- 
     		//String downloadPath = "C:/Users/galanisd/Desktop/data.zip";
     		String downloadPath = "/home/ilsp/Desktop/data.zip";
     		
     		// --- Seelct workflow
+    		//String wid = "DGTest1";
+    		//String wid = "DGTest2NoDocker";
     		//String wid = "funding-mining";
-    		//String wid = "Datacite";
-    		String wid = "DGTest1";
+    		String wid = "Datacite";    		
+    		//String wid = "omtd workflow";
+    		
+    		
     		
     		// DG
     		//String archiveID = uploadDataToStoreArchive(storeEndpoint, folderWithPDFs);
     		//Mark
-    		Path archiveData = Paths.get(folderWithPDFs);
+    		Path archiveData = Paths.get(inFolder);
     		StoreRESTClient store = new StoreRESTClient(storeEndpoint);
     		String archiveID = uploadArchive(store, archiveData);    	
     		log.info("Data uploaded to STORE " + storeEndpoint + " " + archiveID);
