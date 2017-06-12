@@ -6,12 +6,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import eu.openminted.store.restclient.StoreRESTClient;
-
 @SpringBootApplication
 public class ExampleScenarioMain implements CommandLineRunner{
 
-	private static final Logger log = LoggerFactory.getLogger(StoreRESTClient.class);
+	private static final Logger log = LoggerFactory.getLogger(ExampleScenarioMain.class);
 	
 	@Override
 	public void run(String... args) throws Exception {
