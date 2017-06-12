@@ -9,6 +9,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import eu.openminted.workflow.api.ExecutionStatus;
 import eu.openminted.workflowservice.rest.common.WorkFlowREST;
 
 public class WorkflowServiceClient {
@@ -25,7 +26,7 @@ public class WorkflowServiceClient {
 	public WorkflowServiceClient(String endpoint) {		
 		this.endpoint = endpoint;
 		this.restTemplate = new RestTemplate();	
-		
+		log.info(WorkflowServiceClient.class.getName());
 		//init();
 	}
 	
@@ -61,6 +62,14 @@ public class WorkflowServiceClient {
 		return st.getBody();
 	}
 	
+	private ExecutionStatus postStatus(String serviceEndpoint, MultiValueMap<String, Object> map){
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		
+		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);	
+		ResponseEntity<ExecutionStatus> st = restTemplate.postForEntity(serviceEndpoint, requestEntity, ExecutionStatus.class);
+		return st.getBody();
+	}
 	private String destination(String endpoint, String service){
 		return endpoint + service;
 	}

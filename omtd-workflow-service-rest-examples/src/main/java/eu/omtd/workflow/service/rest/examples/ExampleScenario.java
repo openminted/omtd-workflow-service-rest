@@ -56,9 +56,13 @@ public class ExampleScenario {
 	}
         
     public static boolean isCompleted(String status){
-		boolean completed = status.equalsIgnoreCase(ExecutionStatus.Status.FINISHED.toString()) ||
-				status.equalsIgnoreCase(ExecutionStatus.Status.FAILED.toString()) ||
-				status.equalsIgnoreCase(ExecutionStatus.Status.CANCELED.toString());
+		//boolean completed = status.equalsIgnoreCase(ExecutionStatus.Status.FINISHED.toString()) ||
+		//		status.equalsIgnoreCase(ExecutionStatus.Status.FAILED.toString()) ||
+		//		status.equalsIgnoreCase(ExecutionStatus.Status.CANCELED.toString());
+    	
+		boolean completed = status.contains(ExecutionStatus.Status.FINISHED.toString()) ||
+				status.contains(ExecutionStatus.Status.FAILED.toString()) ||
+				status.contains(ExecutionStatus.Status.CANCELED.toString());
 		
 		return completed; 
     }
@@ -83,6 +87,7 @@ public class ExampleScenario {
 		log.info("jobID:" + jobID);
 		
 		String status = client.getStatus(jobID);
+		//status.
 		log.info("Status:" + status);
 
 		while(!isCompleted(status)){
@@ -90,6 +95,10 @@ public class ExampleScenario {
 			status = client.getStatus(jobID);
 			log.info("status:" + status);
 		}
+		
+		//if(status.getStatus().toString().equalsIgnoreCase(ExecutionStatus.Status.FINISHED.toString())){
+		//	log.info("resulting corpus:" + status.getCorpusID());
+		//}
     }
     
     // Main
@@ -101,7 +110,7 @@ public class ExampleScenario {
     		// --- Choose storeEndpoint.
     		//String storeEndpoint = "http://localhost:8080/";
     		//String storeEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8888/";
-    		String storeEndpoint = "http://83.212.101.85:8090";
+    		String storeEndpoint = "http://83.212.101.85:8090/";
 
     		// --- Choose workflowEndpoint.
     		//String workflowEndpoint = "http://localhost:8881/";    		    		

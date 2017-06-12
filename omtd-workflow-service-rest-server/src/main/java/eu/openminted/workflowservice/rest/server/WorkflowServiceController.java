@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.openminted.registry.domain.Component;
 import eu.openminted.registry.domain.MetadataHeaderInfo;
 import eu.openminted.registry.domain.MetadataIdentifier;
+import eu.openminted.workflow.api.ExecutionStatus;
 import eu.openminted.workflow.api.WorkflowJob;
 import eu.openminted.workflow.api.WorkflowService;
 import eu.openminted.workflowservice.rest.common.WorkFlowREST;
@@ -47,8 +48,7 @@ public class WorkflowServiceController {
 			
 			Component workflow = new Component();
 			workflow.setMetadataHeaderInfo(metadataHeaderInfo);
-			
-			
+						
 	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId);
 	    	log.info("execute->");
 	    	ret = workflowService.execute(workflowJob);
@@ -58,18 +58,17 @@ public class WorkflowServiceController {
     	}   	
     }
     
-    @RequestMapping(value=WorkFlowREST.getStatus, method=RequestMethod.POST)
+    @RequestMapping(value=WorkFlowREST.getStatus, method=RequestMethod.POST,  produces = "application/json")
     @ResponseBody
-    public String getStatus(@RequestParam(WorkFlowREST.jobID) String jobID){
+    public ExecutionStatus getStatus(@RequestParam(WorkFlowREST.jobID) String jobID){
     	
     	log.info("jobID:" + jobID);
-    	String ret = null;
-    	
+    	    	
     	try{
-    		ret = workflowService.getExecutionStatus(jobID).getStatus().toString();
-	    	return ret;
+    		ExecutionStatus status =  workflowService.getExecutionStatus(jobID);
+    		return status;
     	}catch (Exception e){
-    		return ret;
+    		return null;
     	}
     	
     }

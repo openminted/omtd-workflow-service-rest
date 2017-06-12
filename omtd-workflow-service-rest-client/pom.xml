@@ -51,12 +51,19 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<scope>test</scope>			
 		</dependency>
 
         <dependency>
         	<groupId>eu.openminted</groupId>
 			<artifactId>omtd-workflow-service-rest-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
+  		
+		<!-- omtd -->
+        <dependency>
+			<groupId>eu.openminted</groupId>
+			<artifactId>omtd-workflow-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
   		</dependency>	
 	</dependencies>
