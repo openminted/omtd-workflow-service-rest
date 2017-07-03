@@ -77,8 +77,8 @@ public class ExampleScenario {
 		log.info("Data uploaded to STORE " + storeEndpoint + " " + archiveID);
 		
 		if(downloadPath != null){
-			store.downloadArchive(archiveID, downloadPath);
-			log.info("Data downloaded to " + downloadPath);
+			store.downloadArchive(archiveID, downloadPath + "input.zip");
+			log.info("Input data downloaded to " + downloadPath);
 		}
 		
 		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);    		    		
@@ -95,10 +95,27 @@ public class ExampleScenario {
 			status = client.getStatus(jobID);
 			log.info("status:" + status);
 		}
+
+		String resultCorpusId = getResultingCorpusId(status, store);
 		
-		//if(status.getStatus().toString().equalsIgnoreCase(ExecutionStatus.Status.FINISHED.toString())){
-		//	log.info("resulting corpus:" + status.getCorpusID());
-		//}
+		if(store.archiveExists(resultCorpusId).getResponse().equalsIgnoreCase(Boolean.TRUE.toString())){
+			store.downloadArchive(resultCorpusId, downloadPath + "output.zip");
+		}else{
+			log.info(resultCorpusId + "does not exist..");
+		}
+    }
+    
+    public String getResultingCorpusId(String status, StoreRESTClient store){
+		if(status.contains(ExecutionStatus.Status.FINISHED.toString()) ){
+			int srt = status.lastIndexOf(":");
+			//int end = status.lastIndexOf("}", srt + 1);					
+			String resultCorpusId = status.substring(srt + 2, status.length() - 2);
+			
+			log.info("resulting corpus:" + resultCorpusId);
+			return resultCorpusId;
+		}	
+		
+		return null;
     }
     
     // Main
@@ -118,22 +135,26 @@ public class ExampleScenario {
     		
     		// --- Choose input
     		//String inFolder = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
-    		String inFolder = "C:/Users/galanisd/Desktop/smallPDFs/";
+    		
+    		String inFolder = "C:/Users/galanisd/Desktop/Data/_AppTestData/OMTDProcessingExp/smallPDFs/";
     		//String inFolder = "/home/ilsp/Desktop/smallPDFs/";
     		//String inFolder = "/home/ilsp/Desktop/TextFiles/";
     		
     		// --- 
-    		String downloadPath = "C:/Users/galanisd/Desktop/data.zip";
+    		String downloadPath = "C:/Users/galanisd/Desktop/Data/_AppTestData/OMTDProcessingExp/";
     		//String downloadPath = "/home/ilsp/Desktop/data.zip";
     		
     		// --- Select workflow
-    		String wid = "DGTest1";
-    		//String wid = "DGTest2NoDocker";
+    		//String wid = "DGTest1";
+    		String wid = "DGTest2NoDocker";
     		//String wid = "DGTest3";
     		//String wid = "funding-mining";
+    		//String wid = "funding-mining2";
     		//String wid = "Datacite";    		
     		//String wid = "omtd workflow";
-
+    		//String wid = "Metabolites";
+    		//String wid = "TopicInference";
+    		
     		ExampleScenario ec = new ExampleScenario();
     		ec.runScenario(storeEndpoint, workflowEndpoint, inFolder, wid, downloadPath);
     		

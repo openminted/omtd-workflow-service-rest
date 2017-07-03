@@ -18,6 +18,7 @@
 		<module>omtd-workflow-service-rest-server</module>
 		<module>omtd-workflow-service-rest-client</module>
 		<module>omtd-workflow-service-rest-common</module>
-    <module>omtd-workflow-service-rest-examples</module>
-  </modules>
+    	<module>omtd-workflow-service-rest-examples</module>
+  	</modules>
+  	
 </project>
