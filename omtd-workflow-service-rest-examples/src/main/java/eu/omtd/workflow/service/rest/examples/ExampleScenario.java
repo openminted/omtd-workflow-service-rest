@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.openminted.registry.domain.Result;
 import eu.openminted.store.restclient.StoreRESTClient;
 import eu.openminted.workflow.api.ExecutionStatus;
 import eu.openminted.workflowservice.rest.client.WorkflowServiceClient;
@@ -98,10 +99,11 @@ public class ExampleScenario {
 
 		String resultCorpusId = getResultingCorpusId(status, store);
 		
-		if(store.archiveExists(resultCorpusId).getResponse().equalsIgnoreCase(Boolean.TRUE.toString())){
+		if(resultCorpusId != null && store.archiveExists(resultCorpusId).getResponse().equalsIgnoreCase(Boolean.TRUE.toString())){
 			store.downloadArchive(resultCorpusId, downloadPath + "output.zip");
+			log.info( "downloading result ... " + downloadPath);
 		}else{
-			log.info(resultCorpusId + "does not exist..");
+			log.info("resultCorpusId " + resultCorpusId + " does not exist.. NULL");
 		}
     }
     
@@ -137,6 +139,8 @@ public class ExampleScenario {
     		//String inFolder = "/home/ilsp/Desktop/DG/OMTD/omtd-simple-workflows/testInput/";
     		
     		String inFolder = "C:/Users/galanisd/Desktop/Data/_AppTestData/OMTDProcessingExp/smallPDFs/";
+    		//String inFolder = "C:/Users/galanisd/Desktop/Data/_AppTestData/OMTDProcessingExp/10PDFs/";
+    		//String inFolder = "C:/Users/galanisd/Desktop/Data/_AppTestData/OMTDProcessingExp/TextFiles/";
     		//String inFolder = "/home/ilsp/Desktop/smallPDFs/";
     		//String inFolder = "/home/ilsp/Desktop/TextFiles/";
     		
@@ -146,14 +150,15 @@ public class ExampleScenario {
     		
     		// --- Select workflow
     		//String wid = "DGTest1";
-    		String wid = "DGTest2NoDocker";
+    		//String wid = "DGTest2NoDocker";
     		//String wid = "DGTest3";
-    		//String wid = "funding-mining";
+    		String wid = "funding-mining";
     		//String wid = "funding-mining2";
     		//String wid = "Datacite";    		
     		//String wid = "omtd workflow";
     		//String wid = "Metabolites";
     		//String wid = "TopicInference";
+    		//String wid = "LDA2";
     		
     		ExampleScenario ec = new ExampleScenario();
     		ec.runScenario(storeEndpoint, workflowEndpoint, inFolder, wid, downloadPath);
