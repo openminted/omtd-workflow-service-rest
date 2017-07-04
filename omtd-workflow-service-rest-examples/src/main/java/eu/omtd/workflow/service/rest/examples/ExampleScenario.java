@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +102,11 @@ public class ExampleScenario {
 		String resultCorpusId = getResultingCorpusId(status, store);
 		
 		if(resultCorpusId != null && store.archiveExists(resultCorpusId).getResponse().equalsIgnoreCase(Boolean.TRUE.toString())){
-			store.downloadArchive(resultCorpusId, downloadPath + "output.zip");
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH_mm_ss");
+			LocalDateTime currentTime = LocalDateTime.now();
+			
+			store.downloadArchive(resultCorpusId, downloadPath + "_WF_" + wid + "output_" + currentTime.format(formatter) + ".zip");
 			log.info( "downloading result ... " + downloadPath);
 		}else{
 			log.info("resultCorpusId " + resultCorpusId + " does not exist.. NULL");
@@ -149,10 +155,10 @@ public class ExampleScenario {
     		//String downloadPath = "/home/ilsp/Desktop/data.zip";
     		
     		// --- Select workflow
-    		//String wid = "DGTest1";
+    		String wid = "DGTest1";
     		//String wid = "DGTest2NoDocker";
     		//String wid = "DGTest3";
-    		String wid = "funding-mining";
+    		//String wid = "funding-mining";
     		//String wid = "funding-mining2";
     		//String wid = "Datacite";    		
     		//String wid = "omtd workflow";
