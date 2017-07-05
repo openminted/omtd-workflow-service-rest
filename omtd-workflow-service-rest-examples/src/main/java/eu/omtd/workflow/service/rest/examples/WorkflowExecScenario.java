@@ -150,8 +150,13 @@ public class WorkflowExecScenario {
 
 		while (!isCompleted(status)) {
 			Thread.currentThread().sleep(5000);
-			status = client.getStatus(jobID);
-			log.info("status:" + status);
+			
+			try{
+				status = client.getStatus(jobID);
+				log.info("status:" + status);
+			}catch(Exception e){
+				log.info("Error on getting status");
+			}
 		}
 
 		String resultCorpusId = getResultingCorpusId(status, store);
@@ -191,10 +196,10 @@ public class WorkflowExecScenario {
 			String outputFolder = "C:/Users/galanisd/Desktop/Data/_AppTestData/OMTDProcessingExp/";
 
 			// --- Choose input
-			// String dataset = "IN_2PDFs";
+			 String dataset = "IN_2PDFs";
 			// String dataset = "IN_10PDFs";
 			// String dataset = "IN_GreekTexts";
-			String dataset = "IN_TextFiles";
+			//String dataset = "IN_TextFiles";
 			// String dataset = "IN_GreekTexts20";
 
 			// String dataset = "IN_2XMIs";
@@ -204,9 +209,9 @@ public class WorkflowExecScenario {
 
 			// --- Select workflow
 			// String wid = "DGTest1";
-			String wid = "DGTest2NoDocker";
+			//String wid = "DGTest2NoDocker";
 			// String wid = "DGTest3";
-			// String wid = "funding-mining";
+			 String wid = "funding-mining";
 			// String wid = "funding-mining2";
 			// String wid = "funding-mining3";
 			// String wid = "Datacite";
