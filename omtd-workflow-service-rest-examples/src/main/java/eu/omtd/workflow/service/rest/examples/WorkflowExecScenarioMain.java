@@ -7,13 +7,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ExampleScenarioMain implements CommandLineRunner{
+public class WorkflowExecScenarioMain implements CommandLineRunner{
 
-	private static final Logger log = LoggerFactory.getLogger(ExampleScenarioMain.class);
+	private static final Logger log = LoggerFactory.getLogger(WorkflowExecScenarioMain.class);
 	
 	@Override
 	public void run(String... args) throws Exception {
-		ExampleScenario ec = new ExampleScenario();
+		WorkflowExecScenario ec = new WorkflowExecScenario();
 		
 		String storeEndpoint = args[0];
 		String workflowEndpoint = args[1];  
@@ -27,7 +27,7 @@ public class ExampleScenarioMain implements CommandLineRunner{
 				
 		if(args.length == 5 || args.length == 4){
 			log.info("\n\n\n Starting Scenario");
-			ec.runScenario(storeEndpoint, workflowEndpoint, inFolder, wid, downloadPath);
+			ec.runScenario(storeEndpoint, workflowEndpoint, inFolder, wid, downloadPath, null);
 		}else{
 			log.info("Check args");
 		}
@@ -36,7 +36,7 @@ public class ExampleScenarioMain implements CommandLineRunner{
 	// == === ==
 	public static void main(String args[]) {
 		log.info("...");
-		SpringApplication app = new SpringApplication(ExampleScenarioMain.class);
+		SpringApplication app = new SpringApplication(WorkflowExecScenarioMain.class);
 		//app.setBannerMode(Banner.Mode.OFF);
 		app.setWebEnvironment(false);
 		app.run(args);
