@@ -8,7 +8,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import eu.openminted.messageservice.connector.MessageServiceConnector;
+import eu.openminted.messageservice.connector.MessageServicePublisher;
+import eu.openminted.messageservice.connector.MessageServiceSubscriber;
 import eu.openminted.workflow.api.WorkflowService;
 import eu.openminted.workflow.service.WorkflowServiceImpl2;
 
@@ -34,7 +35,13 @@ public class Config {
     }
 	
 	@Bean
-	public MessageServiceConnector getJMSService(){
-		return new MessageServiceConnector(env.getProperty("jms.host"));
+	public MessageServicePublisher getMessageServicePublisher(){
+		return new MessageServicePublisher(env.getProperty("messageService.host"));
 	}
+
+	@Bean
+	public MessageServiceSubscriber getMessageServiceSubscriber(){
+		return new MessageServiceSubscriber(env.getProperty("messageService.host"));
+	}
+	
 }

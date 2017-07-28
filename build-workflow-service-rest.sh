@@ -1,3 +1,9 @@
+cd ..
+
+# message-service connector
+cd omtd-message-service-connector
+rm -rf target/*
+mvn clean install
 
 cd ..
 
