@@ -18,12 +18,7 @@ public class Config {
 
 	@Autowired
 	private Environment env;
-	
-	@Bean
-	public WorkflowService getWorkflowService(){	
-		return new WorkflowServiceImpl2();
-	}
-	
+		
 	@Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
@@ -34,6 +29,11 @@ public class Config {
         };
     }
 	
+	@Bean
+	public WorkflowService getWorkflowService(){	
+		return new WorkflowServiceImpl2(getMessageServicePublisher(), getMessageServiceSubscriber());
+	}
+
 	@Bean
 	public MessageServicePublisher getMessageServicePublisher(){
 		return new MessageServicePublisher(env.getProperty("messageService.host"));
