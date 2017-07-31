@@ -40,14 +40,7 @@ public class WorkflowServiceController {
     	String ret = null;
     	
     	try{
-			MetadataIdentifier metadataId = new MetadataIdentifier();
-			metadataId.setValue(wid);
-			
-			MetadataHeaderInfo metadataHeaderInfo = new MetadataHeaderInfo();		
-			metadataHeaderInfo.setMetadataRecordIdentifier(metadataId);
-			
-			Component workflow = new Component();
-			workflow.setMetadataHeaderInfo(metadataHeaderInfo);
+			Component workflow = Utils.createComponent(wid);
 						
 	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId);
 	    	log.info("execute->");
@@ -72,4 +65,6 @@ public class WorkflowServiceController {
     	}
     	
     }
+    
+    
 }
