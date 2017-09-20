@@ -62,12 +62,18 @@
   		
 		<!-- omtd -->
         <dependency>
-			<groupId>eu.openminted</groupId>
-			<artifactId>omtd-workflow-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-  		</dependency>	
+			<!-- this isn't in our repo yet so pull straight from github for now -->
+			<groupId>com.github.openminted</groupId>
+			<artifactId>omtd-workflow-api</artifactId>
+			<version>-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
-	
+	<repositories>
+<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 	<build>
         <plugins>
             <plugin>

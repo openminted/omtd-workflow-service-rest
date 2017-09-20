@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import eu.openminted.messageservice.connector.MessageServicePublisher;
 import eu.openminted.messageservice.connector.MessageServiceSubscriber;
 import eu.openminted.workflow.api.WorkflowService;
-import eu.openminted.workflow.service.WorkflowServiceImpl2;
+import eu.openminted.workflow.service.WorkflowServiceImpl;
 import eu.openminted.workflow.service.WorkflowServiceMessagesHandler;
 
 @Configuration
@@ -32,7 +32,7 @@ public class Config {
 	
 	@Bean
 	public WorkflowService getWorkflowService(){	
-		return new WorkflowServiceImpl2(getMessageServicePublisher(), getMessageServiceSubscriber());
+		return new WorkflowServiceImpl(getMessageServicePublisher(), getMessageServiceSubscriber());
 	}
 
 	@Bean
