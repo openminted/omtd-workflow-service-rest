@@ -66,5 +66,31 @@ public class WorkflowServiceController {
     	
     }
     
+    @RequestMapping(value=WorkFlowREST.pauseJob, method=RequestMethod.POST,  produces = "application/json")
+    @ResponseBody
+    public void pauseJob(@RequestParam(WorkFlowREST.workflowExecutionId) String weid){
+    	
+    	log.info("workflowExecutionId:" + weid);
+    	    	
+    	try{
+    		workflowService.pause(weid);
+    		//return status;
+    	}catch (Exception e){
+    		//return null;
+    	}
+    }
     
+    @RequestMapping(value=WorkFlowREST.cancelJob, method=RequestMethod.POST,  produces = "application/json")
+    @ResponseBody
+    public void cancelJob(@RequestParam(WorkFlowREST.workflowExecutionId) String weid){
+    	
+    	log.info("workflowExecutionId:" + weid);
+    	    	
+    	try{
+    		workflowService.cancel(weid);
+    		//return status;
+    	}catch (Exception e){
+    		//return null;
+    	}
+    }
 }
