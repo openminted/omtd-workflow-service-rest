@@ -139,6 +139,8 @@ public class WorkflowExecScenario {
 	private void executeAndGetResult(String archiveID, String storeEndpoint, String workflowEndpoint, String wid,
 			String downloadPath) throws Exception {
 		StoreRESTClient store = new StoreRESTClient(storeEndpoint);
+		
+		long start = System.currentTimeMillis();
 		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);
 
 		String jobID = client.executeJob(wid, archiveID);
@@ -158,7 +160,9 @@ public class WorkflowExecScenario {
 				log.info("Error on getting status");
 			}
 		}
-
+		long end = System.currentTimeMillis();
+		log.info("workflow service processing time:" + ((end-start)/1000) + " sec");
+		
 		String resultCorpusId = getResultingCorpusId(status, store);
 
 		if (resultCorpusId != null
@@ -175,83 +179,5 @@ public class WorkflowExecScenario {
 		}
 	}
 
-	public void configureWorkflowScenarioAndRunIt(String archiveID) {
-		try {
 
-			// TO-DO !!!!!!!!!!!!
-			// Move config to a properties file.
-			// TO-DO !!!!!!!!!!!!
-			
-			// --- Choose storeEndpoint.
-			// String storeEndpoint = "http://localhost:8080/";
-			// String storeEndpoint =
-			// "http://snf-754063.vm.okeanos.grnet.gr:8888/";
-			String storeEndpoint = "http://83.212.101.85:8090/";
-
-			// --- Choose workflowEndpoint.
-			// String workflowEndpoint = "http://localhost:8881/";
-			String workflowEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8881/";
-
-			String inputFolder = "C:/Users/galanisd/Google Drive/WorkILSP/Contracts/15OpenMinTeD/OpenMinTeD_DG/_WP6-7-8/OMTDProcessingExp/";
-			String outputFolder = "C:/Users/galanisd/Desktop/Data/_AppTestData/OMTDProcessingExp/";
-
-			// --- Choose input
-			 String dataset = "IN_2PDFs";
-			// String dataset = "IN_10PDFs";
-			// String dataset = "IN_GreekTexts";
-			//String dataset = "IN_TextFiles";
-			// String dataset = "IN_GreekTexts20";
-
-			// String dataset = "IN_2XMIs";
-			// String dataset = "IN_10XMIs";
-
-			inputFolder = inputFolder + dataset + "/";
-
-			// --- Select workflow
-			// String wid = "DGTest1";
-			//String wid = "DGTest2NoDocker";
-			// String wid = "DGTest3";
-			 String wid = "funding-mining";
-			// String wid = "funding-mining2";
-			// String wid = "funding-mining3";
-			// String wid = "Datacite";
-			// String wid = "omtd workflow";
-			// String wid = "Metabolites";
-			// String wid = "TopicInference";
-			// String wid = "LDA2";
-
-			runScenario(storeEndpoint, workflowEndpoint, inputFolder, wid, outputFolder, null);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	// Main
-	// ---
-	// ---
-	public static void main(String[] args) {
-
-		WorkflowExecScenario ec = new WorkflowExecScenario();
-
-		int times = 10;
-		String aid = null;
-
-		// run the scenario * times.
-		for (int i = 0; i < times; i++) {
-			if (i == 0) {
-				aid = null;
-				ec.setDownloadInput(true);
-			} else {
-				// reuse the archive from previous run.
-				aid = ec.getArchiveIDForProcessing();
-				ec.setDownloadInput(false);
-			}
-
-			// Run scenario.
-			log.info(i + " aid:" + aid);
-			ec.configureWorkflowScenarioAndRunIt(aid);
-		}
-
-	}
 }
