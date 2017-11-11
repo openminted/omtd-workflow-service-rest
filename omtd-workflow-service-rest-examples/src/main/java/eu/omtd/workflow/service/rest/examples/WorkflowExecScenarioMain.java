@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class WorkflowExecScenarioMain implements CommandLineRunner{
 
 	private static final Logger log = LoggerFactory.getLogger(WorkflowExecScenarioMain.class);

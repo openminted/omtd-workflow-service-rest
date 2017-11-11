@@ -143,6 +143,7 @@ public class WorkflowExecScenario {
 		long start = System.currentTimeMillis();
 		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);
 
+		log.info("Calling Workflow service");
 		String jobID = client.executeJob(wid, archiveID);
 		log.info("jobID:" + jobID);
 
@@ -178,6 +179,4 @@ public class WorkflowExecScenario {
 			log.info("resultCorpusId " + resultCorpusId + " does not exist.. NULL");
 		}
 	}
-
-
 }
