@@ -171,10 +171,12 @@ public class WorkflowExecScenario {
 
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH_mm_ss");
 			LocalDateTime currentTime = LocalDateTime.now();
-
-			store.downloadArchive(resultCorpusId,
-					downloadPath + "_WF_" + wid + "output_" + currentTime.format(formatter) + ".zip");
-			log.info("downloading result ... " + downloadPath);
+			
+			if(downloadPath !=null){
+				store.downloadArchive(resultCorpusId,
+						downloadPath + "_WF_" + wid + "output_" + currentTime.format(formatter) + ".zip");
+				log.info("downloading result ... " + downloadPath);
+			}
 		} else {
 			log.info("resultCorpusId " + resultCorpusId + " does not exist.. NULL");
 		}
