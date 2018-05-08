@@ -17,3 +17,4 @@
 /omtd-workflow-service-rest-examples/.settings
 /omtd-workflow-service-rest-examples/.classpath
 /omtd-workflow-service-rest-examples/.gitignore
+**/*.iml
