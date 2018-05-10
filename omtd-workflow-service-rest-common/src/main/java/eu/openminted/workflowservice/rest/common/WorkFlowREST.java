@@ -13,6 +13,7 @@ public class WorkFlowREST {
 
 	
 	public final static String workflowId = "workflowId";
+	public final static String workflow = "workflow";
 	public final static String corpusId = "corpusId";
 	
 	public final static String workflowExecutionId = "workflowExecutionId";
