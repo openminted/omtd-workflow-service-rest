@@ -1,5 +1,6 @@
 package eu.openminted.workflowservice.rest.client;
 
+import eu.openminted.registry.domain.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -38,9 +39,9 @@ public class WorkflowServiceClient {
 		this.endpoint = endpoint;
 	}
 
-	public String executeJob(String workflowId, String corpusId) {
+	public String executeJob(Component workflow, String corpusId) {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
-		params.add(WorkFlowREST.workflowId, workflowId);
+		params.add(WorkFlowREST.workflow, workflow);
 		params.add(WorkFlowREST.corpusId, corpusId);
 		
 		return post(destination(endpoint, WorkFlowREST.executeJob), params);
