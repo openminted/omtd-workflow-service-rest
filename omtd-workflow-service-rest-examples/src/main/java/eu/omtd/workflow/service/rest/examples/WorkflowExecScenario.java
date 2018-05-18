@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import eu.openminted.registry.domain.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +145,7 @@ public class WorkflowExecScenario {
 		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);
 
 		log.info("Calling Workflow service");
-		String jobID = client.executeJob(wid, archiveID);
+		String jobID = client.executeJob(new Component(), archiveID);
 		log.info("jobID:" + jobID);
 
 		String status = client.getStatus(jobID);
