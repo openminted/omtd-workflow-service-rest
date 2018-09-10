@@ -18,7 +18,7 @@ public class WorkflowServiceClientTest {
 
 		WorkflowServiceClient client = new WorkflowServiceClient("http://localhost:8881/");
 		
-		client.executeJob(workflow, "321");
+		client.executeJob(workflow, "321", "fulltext");
 	}
 	
 	

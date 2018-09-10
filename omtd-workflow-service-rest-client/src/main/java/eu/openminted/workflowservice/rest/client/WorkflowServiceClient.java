@@ -39,10 +39,11 @@ public class WorkflowServiceClient {
 		this.endpoint = endpoint;
 	}
 
-	public String executeJob(Component workflow, String corpusId) {
+	public String executeJob(Component workflow, String corpusId, String subArchive) {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
 		params.add(WorkFlowREST.workflow, workflow);
 		params.add(WorkFlowREST.corpusId, corpusId);
+		params.add(WorkFlowREST.subArchive, subArchive);
 		
 		return post(destination(endpoint, WorkFlowREST.executeJob), params);
 	}
