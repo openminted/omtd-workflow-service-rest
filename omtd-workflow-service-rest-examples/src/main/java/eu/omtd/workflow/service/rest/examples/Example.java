@@ -28,16 +28,32 @@ public class Example {
 			//String workflowEndpoint = "http://snf-754063.vm.okeanos.grnet.gr:8881/";
 			// Prod cluster: Galaxy VM
 			//String workflowEndpoint = "http://83.212.72.92:8881/";
+			
 			// Prod cluster: worklfow-service VM
-			String workflowEndpoint = "http://83.212.72.106:8881/";
-
+			//String workflowEndpoint = "http://83.212.72.106:8881/";
+			// Test cluster:
+			//String workflowEndpoint = "http://83.212.99.0:8881/";
+			
+			//String workflowEndpoint = "83.212.101.141:8881/";
+			// beta
+			//String workflowEndpoint = "http://83.212.98.33:8881/";
+			// test
+			String workflowEndpoint = "http://83.212.72.105:8881/";
+			
 			String inputFolder = "/home/ilsp/Desktop/OMTDProcessingExp/";
 			String outputFolder = "/home/ilsp/Desktop/OMTDProcessingExp/";
 
 			// --- Choose input
-			String dataset = "IN_2PDFs";
-			 //String dataset = "IN_10PDFs";
+			//String dataset = "corpusMarkNameO";
+			//String dataset = "corpusMark";
+			//String dataset = "IN_2PDFs";
+			//String dataset = "xmiINWOTS";
+			//String dataset = "xmiINIXA";
+			String dataset = "xmiINAK";
+			//String dataset = "IN_REC";
+			//String dataset = "IN_10PDFs";
 			//String dataset = "docs";
+			//String dataset = "docsAll";
 			//String dataset = "IN_GreekTexts";
 			//String dataset = "IN_TextFiles";
 			// String dataset = "IN_GreekTexts20";
@@ -48,7 +64,7 @@ public class Example {
 
 			inputFolder = inputFolder + dataset + "/";
 
-			// --- Select workflow
+			// --- Select workflow`
 			//String wid = "DGTest1";
 			//String wid = "DGTest2NoDocker";
 			//String wid = "DGTest3";
@@ -58,11 +74,11 @@ public class Example {
 			//String wid = "DemoWF3SSHNER";
 			//String wid = "DemoWF4Metabolites";	
 			
+			//String wid = "JustOmtdImport";
 			//String wid = "OmtdImport";
 			//String wid = "omtdDKProTest00PDF2Text";
 			//String wid = "omtdDKProTest01SegmWithCORENLP";
 			//String wid = "omtdDKProTest02Readability";
-			String wid = "omtdDKProTest02Readability";
 			//String wid = "OLDomtdDKProTest02Readability";
 			//String wid = "omtdDKProTest03LangIdentification";
 			//String wid = "omtdDKProTest04NGramAnnotator";
@@ -81,8 +97,17 @@ public class Example {
 			//String wid = "omtdDKProTest17OpenNLP";
 			//String wid = "omtdDKProTest18ClearNLP";
 			//String wid = "omtdDKProTest19Writers";
+			//String wid = "omtdDKProTest20TikaReader";
+			//String wid = "omtdDKProTest21BreakIteratorSeg";
+			//String wid = "omtdDKProTest22CORENLP";
+			//String wid = "omtdDKProTest23CORENLP";
+			//String wid = "omtdDKProTest24";
+			//String wid = "omtdDKProTest25";
+			//String wid = "omtdDKProTest26Stanford";
+			//String wid = "omtdDKProTest27Mate";
 			
 			//String wid = "omtdGATETest00AnnieTokenizer";
+			//String wid = "omtdGATETest00AnnieTokenizerWithCustomParams";
 			//String wid = "omtdGATETest01AnnieSplitter";
 			//String wid = "omtdGATETest02AnniePOS";
 
@@ -90,7 +115,15 @@ public class Example {
 			// String wid = "LDA2";
 			// String wid = "omtd workflow";
 			
-			ec.runScenario(storeEndpoint, workflowEndpoint, inputFolder, wid, outputFolder, null);
+			//String wid = "Chebi";
+			//String wid = "Neuro";
+			//String wid = "openNLP";
+			//String wid = "LangDet";
+			//String wid = "IXA";
+			String wid = "GPV";
+			//String wid = "fr.univnantes.termsuite.tools.TerminologyExtractorCLI";
+			//String wid = "INRASegmenter";
+			ec.runScenario(storeEndpoint, workflowEndpoint, inputFolder, wid, outputFolder, archiveID);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,18 +134,19 @@ public class Example {
 		
 		ec = new WorkflowExecScenario();
 		int times = 1;
-		
 		// -- NO 
 		String aid = null;
-		// -- 10 PDFs
-		//String aid = "820e7f33-6979-41a1-b1df-4460f1d7d60f";
-
+		//aid = "5ce418e4-976b-48f6-bb5a-c14a0d4c8548";
+		//aid="dcde4f3a-384a-44e7-ac3d-3d0f06e93363";
+		//aid= "e1979041-4f96-4263-835e-d9eea05be424";
+		
 		// run the scenario * times.
 		for (int i = 0; i < times; i++) {
 			if (i == 0 /*&& aid != null*/) {
-				ec.setDownloadInput(true);
+				//ec.setDownloadInput(true);
+				ec.setDownloadInput(false);
 			} else {
-				// reuse the archive from previous run.
+				// Reuse the archive from previous run.
 				aid = ec.getArchiveIDForProcessing();
 				ec.setDownloadInput(false);
 			}

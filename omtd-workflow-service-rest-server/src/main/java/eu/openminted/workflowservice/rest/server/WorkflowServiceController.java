@@ -31,15 +31,14 @@ public class WorkflowServiceController {
     
     @RequestMapping(value=WorkFlowREST.executeJob, method=RequestMethod.POST)
     @ResponseBody
-    public String executeJob(@RequestBody Component workflow, @RequestParam(WorkFlowREST.corpusId) String corpusId){
-    	
-    	log.info("wid:" + workflow.getMetadataHeaderInfo().getMetadataRecordIdentifier().getValue() + " corpusId:" + corpusId);
+    public String executeJob(@RequestParam(WorkFlowREST.workflow) Component workflow, @RequestParam(WorkFlowREST.corpusId) String corpusId, @RequestParam(WorkFlowREST.subArchive) String subArchive){    	
+    	log.info("wid:" + workflow.getMetadataHeaderInfo().getMetadataRecordIdentifier().getValue() + " corpusId:" + corpusId + " subArchive: " + subArchive);
     	String ret = null;
     	
     	try{
 //			Component workflow = Utils.createComponent(wid);
 						
-	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId);
+	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId, subArchive);
 	    	log.info("execute->");
 	    	ret = workflowService.execute(workflowJob);
 	    	return ret;

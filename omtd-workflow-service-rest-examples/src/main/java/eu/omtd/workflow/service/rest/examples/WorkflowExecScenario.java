@@ -77,9 +77,17 @@ public class WorkflowExecScenario {
 
 	public static String getResultingCorpusId(String status, StoreRESTClient store) {
 		if (status.contains(ExecutionStatus.Status.FINISHED.toString())) {
-			int srt = status.lastIndexOf(":");
-			// int end = status.lastIndexOf("}", srt + 1);
-			String resultCorpusId = status.substring(srt + 2, status.length() - 2);
+			System.out.println("status:" + status);
+			
+			String anchor = "corpusID";
+			
+			int srt = status.lastIndexOf(anchor);
+			int end = status.indexOf(",", srt + anchor.length() );
+			if(end == -1){
+				end = status.indexOf("}", srt + anchor.length() );
+			}
+			
+			String resultCorpusId = status.substring(srt + anchor.length() + 3, end - 1);
 
 			log.info("resulting corpus:" + resultCorpusId);
 			return resultCorpusId;
@@ -113,6 +121,8 @@ public class WorkflowExecScenario {
 
 		if (archiveID == null) {
 			uploadDataToStore(inFolder, downloadPath, storeEndpoint);
+		}else{
+			this.archiveIDForProcessing = archiveID;
 		}
 
 		executeAndGetResult(archiveIDForProcessing, storeEndpoint, workflowEndpoint, wid, downloadPath);
@@ -145,7 +155,7 @@ public class WorkflowExecScenario {
 		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);
 
 		log.info("Calling Workflow service");
-		String jobID = client.executeJob(new Component(), archiveID);
+		String jobID = client.executeJob(wid, archiveID, "fulltext");
 		log.info("jobID:" + jobID);
 
 		String status = client.getStatus(jobID);
@@ -180,6 +190,18 @@ public class WorkflowExecScenario {
 			}
 		} else {
 			log.info("resultCorpusId " + resultCorpusId + " does not exist.. NULL");
+		}
+		
+		
+		try{// Delete resulting corpus ID to save space.
+			if(resultCorpusId != null){
+				boolean deleteResult = store.deleteArchive(resultCorpusId).getResponse().equalsIgnoreCase(Boolean.TRUE.toString());
+				log.info(" Delete archive " + resultCorpusId + " "  +  deleteResult);
+			}else{
+				log.info("resultCorpusId: " + resultCorpusId + " cannot be deleted");
+			}
+		}catch(Exception e){
+			log.error("ERROR ON DELETING: " + resultCorpusId);
 		}
 	}
 }
