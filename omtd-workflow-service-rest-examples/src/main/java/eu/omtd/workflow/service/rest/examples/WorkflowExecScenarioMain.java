@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import eu.openminted.corpus.OMTDCorpus;
+
 //@SpringBootApplication
 public class WorkflowExecScenarioMain implements CommandLineRunner{
 
@@ -45,7 +47,7 @@ public class WorkflowExecScenarioMain implements CommandLineRunner{
 		log.info("\n\n\n Starting Scenario");
 		if(args.length == 6 || args.length == 5){
 			log.info("\n\n\n Starting Scenario");
-			ec.runScenario(storeEndpoint, workflowEndpoint, inFolder, wid, downloadPath, inArchive);
+			ec.runScenario(storeEndpoint, workflowEndpoint, inFolder, wid, downloadPath, inArchive, OMTDCorpus.subArchiveFullText);
 		}else{
 			log.info("Check args");
 		}

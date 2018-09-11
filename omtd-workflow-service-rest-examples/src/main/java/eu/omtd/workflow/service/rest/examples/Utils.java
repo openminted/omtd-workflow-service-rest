@@ -1,4 +1,4 @@
-package eu.openminted.workflowservice.rest.server;
+package eu.omtd.workflow.service.rest.examples;
 
 import eu.openminted.registry.domain.Component;
 import eu.openminted.registry.domain.MetadataHeaderInfo;

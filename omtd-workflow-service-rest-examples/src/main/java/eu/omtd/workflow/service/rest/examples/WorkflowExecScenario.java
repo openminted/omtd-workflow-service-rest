@@ -48,9 +48,9 @@ public class WorkflowExecScenario {
 	}
 
 	// Mark G.
-	private static String uploadArchive(StoreRESTClient storeClient, Path archiveData) throws IOException {
+	private static String createAndUploadArchive(StoreRESTClient storeClient, Path archiveData, String subarchiveForData) throws IOException {
 		String archiveID = storeClient.createArchive().getResponse();
-		String annotationsFolderId = storeClient.createSubArchive(archiveID, "fulltext").getResponse();
+		String annotationsFolderId = storeClient.createSubArchive(archiveID, subarchiveForData).getResponse();
 
 		Files.walk(archiveData).filter(path -> !Files.isDirectory(path)).forEach(path -> {
 			storeClient.storeFile(path.toFile(), annotationsFolderId, path.getFileName().toString());
@@ -117,27 +117,27 @@ public class WorkflowExecScenario {
 	}
 
 	public void runScenario(String storeEndpoint, String workflowEndpoint, String inFolder, String wid,
-			String downloadPath, String archiveID) throws Exception {
+			String downloadPath, String archiveID, String subArchive) throws Exception {
 
 		if (archiveID == null) {
-			uploadDataToStore(inFolder, downloadPath, storeEndpoint);
+			uploadDataToStore(inFolder, downloadPath, storeEndpoint, subArchive);
 		}else{
 			this.archiveIDForProcessing = archiveID;
 		}
 
-		executeAndGetResult(archiveIDForProcessing, storeEndpoint, workflowEndpoint, wid, downloadPath);
+		executeAndGetResult(archiveIDForProcessing, storeEndpoint, workflowEndpoint, wid, downloadPath, subArchive);
 
 	}
 
-	private void uploadDataToStore(String inFolder, String downloadPath, String storeEndpoint) throws Exception {
+	private void uploadDataToStore(String inFolder, String downloadPath, String storeEndpoint, String subArchive) throws Exception {
 		// DG
 		// String archiveID = uploadDataToStoreArchive(storeEndpoint,
 		// folderWithPDFs);
 		// Mark
 		Path archiveData = Paths.get(inFolder);
 		StoreRESTClient store = new StoreRESTClient(storeEndpoint);
-		String archiveID = uploadArchive(store, archiveData);
-		log.info("Data uploaded to STORE " + storeEndpoint + " " + archiveID);
+		String archiveID = createAndUploadArchive(store, archiveData, subArchive);
+		log.info("Data uploaded to STORE " + storeEndpoint + " archiveID:" + archiveID);
 
 		if (this.downloadInput && downloadPath != null) {
 			store.downloadArchive(archiveID, downloadPath + "input.zip");
@@ -148,14 +148,14 @@ public class WorkflowExecScenario {
 	}
 
 	private void executeAndGetResult(String archiveID, String storeEndpoint, String workflowEndpoint, String wid,
-			String downloadPath) throws Exception {
+			String downloadPath, String subArchive) throws Exception {
 		StoreRESTClient store = new StoreRESTClient(storeEndpoint);
 		
 		long start = System.currentTimeMillis();
 		WorkflowServiceClient client = new WorkflowServiceClient(workflowEndpoint);
 
 		log.info("Calling Workflow service");
-		String jobID = client.executeJob(wid, archiveID, "fulltext");
+		String jobID = client.executeJob(wid, archiveID, subArchive);
 		log.info("jobID:" + jobID);
 
 		String status = client.getStatus(jobID);

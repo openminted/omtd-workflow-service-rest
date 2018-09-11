@@ -3,6 +3,8 @@ package eu.omtd.workflow.service.rest.examples;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.openminted.corpus.OMTDCorpus;
+
 public class Example {
 	
 	private WorkflowExecScenario ec; 
@@ -38,7 +40,9 @@ public class Example {
 			// beta
 			//String workflowEndpoint = "http://83.212.98.33:8881/";
 			// test
-			String workflowEndpoint = "http://83.212.72.105:8881/";
+			//String workflowEndpoint = "http://83.212.72.105:8881/";
+			
+			String workflowEndpoint = "http://83.212.98.33:8881/";
 			
 			String inputFolder = "/home/ilsp/Desktop/OMTDProcessingExp/";
 			String outputFolder = "/home/ilsp/Desktop/OMTDProcessingExp/";
@@ -46,10 +50,10 @@ public class Example {
 			// --- Choose input
 			//String dataset = "corpusMarkNameO";
 			//String dataset = "corpusMark";
-			//String dataset = "IN_2PDFs";
+			String dataset = "IN_2PDFs";
 			//String dataset = "xmiINWOTS";
 			//String dataset = "xmiINIXA";
-			String dataset = "xmiINAK";
+			//String dataset = "xmiINAK";
 			//String dataset = "IN_REC";
 			//String dataset = "IN_10PDFs";
 			//String dataset = "docs";
@@ -76,7 +80,7 @@ public class Example {
 			
 			//String wid = "JustOmtdImport";
 			//String wid = "OmtdImport";
-			//String wid = "omtdDKProTest00PDF2Text";
+			String wid = "omtdDKProTest00PDF2Text";
 			//String wid = "omtdDKProTest01SegmWithCORENLP";
 			//String wid = "omtdDKProTest02Readability";
 			//String wid = "OLDomtdDKProTest02Readability";
@@ -120,10 +124,13 @@ public class Example {
 			//String wid = "openNLP";
 			//String wid = "LangDet";
 			//String wid = "IXA";
-			String wid = "GPV";
+			//String wid = "GPV";
 			//String wid = "fr.univnantes.termsuite.tools.TerminologyExtractorCLI";
 			//String wid = "INRASegmenter";
-			ec.runScenario(storeEndpoint, workflowEndpoint, inputFolder, wid, outputFolder, archiveID);
+			
+			
+			String subArchive = OMTDCorpus.subArchiveFullText;
+			ec.runScenario(storeEndpoint, workflowEndpoint, inputFolder, wid, outputFolder, archiveID, subArchive);
 
 		} catch (Exception e) {
 			e.printStackTrace();
