@@ -11,6 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import eu.openminted.workflow.api.ExecutionStatus;
+import eu.openminted.workflowservice.rest.common.Utils;
 import eu.openminted.workflowservice.rest.common.WorkFlowREST;
 
 public class WorkflowServiceClient {
@@ -41,7 +42,9 @@ public class WorkflowServiceClient {
 
 	public String executeJob(String wid, String corpusId, String subArchive) {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
-		params.add(WorkFlowREST.workflow, wid);
+		
+		Component workflowMetadata = Utils.createComponentMetadata(wid);
+		params.add(WorkFlowREST.workflow, workflowMetadata);
 		params.add(WorkFlowREST.corpusId, corpusId);
 		params.add(WorkFlowREST.subArchive, subArchive);
 		

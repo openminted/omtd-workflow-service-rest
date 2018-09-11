@@ -1,4 +1,4 @@
-package eu.omtd.workflow.service.rest.examples;
+package eu.openminted.workflowservice.rest.common;
 
 import eu.openminted.registry.domain.Component;
 import eu.openminted.registry.domain.MetadataHeaderInfo;
@@ -10,16 +10,16 @@ import eu.openminted.registry.domain.MetadataIdentifier;
  */
 public class Utils {
 
-	public static Component createComponent(String wid){
+	public static Component createComponentMetadata(String wid){
 		MetadataIdentifier metadataId = new MetadataIdentifier();
 		metadataId.setValue(wid);
 		
 		MetadataHeaderInfo metadataHeaderInfo = new MetadataHeaderInfo();		
 		metadataHeaderInfo.setMetadataRecordIdentifier(metadataId);
 		
-		Component workflow = new Component();
-		workflow.setMetadataHeaderInfo(metadataHeaderInfo);
+		Component componentMetadata = new Component();
+		componentMetadata.setMetadataHeaderInfo(metadataHeaderInfo);
 		
-		return workflow;
+		return componentMetadata;
 	}
 }
