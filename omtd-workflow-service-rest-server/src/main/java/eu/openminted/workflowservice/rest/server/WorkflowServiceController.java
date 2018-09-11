@@ -29,7 +29,7 @@ public class WorkflowServiceController {
        this.workflowService = workflowService;
     }    
     
-    @RequestMapping(value=WorkFlowREST.executeJob, method=RequestMethod.POST)
+    @RequestMapping(value=WorkFlowREST.executeJob, method=RequestMethod.POST, consumes ="application/json")
     @ResponseBody
     public String executeJob(@RequestParam(WorkFlowREST.workflow) Component workflow, @RequestParam(WorkFlowREST.corpusId) String corpusId, @RequestParam(WorkFlowREST.subArchive) String subArchive){    	
     	log.info("wid:" + workflow.getMetadataHeaderInfo().getMetadataRecordIdentifier().getValue() + " corpusId:" + corpusId + " subArchive: " + subArchive);
@@ -37,7 +37,6 @@ public class WorkflowServiceController {
     	
     	try{
 //			Component workflow = Utils.createComponent(wid);
-						
 	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId, subArchive);
 	    	log.info("execute->");
 	    	ret = workflowService.execute(workflowJob);
