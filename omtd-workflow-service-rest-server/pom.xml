@@ -59,7 +59,6 @@
         
         <!-- omtd -->
  	
-  		
         <dependency>
         	<groupId>eu.openminted</groupId>
 			<artifactId>omtd-workflow-service-rest-common</artifactId>

@@ -7,12 +7,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import eu.openminted.registry.domain.Component;
 import eu.openminted.registry.domain.MetadataHeaderInfo;
 import eu.openminted.registry.domain.MetadataIdentifier;
 import eu.openminted.workflow.api.ExecutionStatus;
 import eu.openminted.workflow.api.WorkflowJob;
 import eu.openminted.workflow.api.WorkflowService;
+import eu.openminted.workflowservice.rest.common.Utils;
 import eu.openminted.workflowservice.rest.common.WorkFlowREST;
 
 @Controller
@@ -21,25 +24,26 @@ public class WorkflowServiceController {
 	private static final Logger log = LoggerFactory.getLogger(WorkflowServiceController.class);
 	
     private final WorkflowService workflowService;
-
+    private ObjectMapper objectMapper;
+    
     /**
      * Constructor.
      */
     @Autowired
     public WorkflowServiceController(WorkflowService workflowService) {
        this.workflowService = workflowService;
+       objectMapper= new ObjectMapper();
     }    
 
-    //@RequestMapping(value=WorkFlowREST.executeJob, method=RequestMethod.POST)
-    @RequestMapping(value=WorkFlowREST.executeJob, method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value=WorkFlowREST.executeJob, method=RequestMethod.POST)
     @ResponseBody
-    public String executeJob(@RequestBody Component workflow, @RequestParam(WorkFlowREST.corpusId) String corpusId, @RequestParam(WorkFlowREST.subArchive) String subArchive){    	
-    	log.info("wid:" + workflow.getMetadataHeaderInfo().getMetadataRecordIdentifier().getValue() + " corpusId:" + corpusId + " subArchive: " + subArchive);
+    public String executeJob(@RequestParam(WorkFlowREST.workflow) String workflow, @RequestParam(WorkFlowREST.corpusId) String corpusId, @RequestParam(WorkFlowREST.subArchive) String subArchive){    	
     	String ret = null;
     	
     	try{
-//			Component workflow = Utils.createComponent(wid);
-	    	WorkflowJob workflowJob = new WorkflowJob(workflow, corpusId, subArchive);
+    	   	Component workflowMetadata = objectMapper.readValue(workflow, Component.class);
+        	log.info("wid:" + workflowMetadata.getMetadataHeaderInfo().getMetadataRecordIdentifier().getValue() + " corpusId:" + corpusId + " subArchive: " + subArchive);
+	    	WorkflowJob workflowJob = new WorkflowJob(workflowMetadata, corpusId, subArchive);
 	    	log.info("execute->");
 	    	ret = workflowService.execute(workflowJob);
 	    	return ret;
@@ -47,6 +51,25 @@ public class WorkflowServiceController {
     		return ret;
     	}   	
     }
+
+/*    
+    @RequestMapping(value=WorkFlowREST.executeJob, method=RequestMethod.POST)
+    @ResponseBody
+    public String executeJob(@RequestParam(WorkFlowREST.workflow) String workflow, @RequestParam(WorkFlowREST.corpusId) String corpusId, @RequestParam(WorkFlowREST.subArchive) String subArchive){    	
+    	//log.info("wid:" + workflow.getMetadataHeaderInfo().getMetadataRecordIdentifier().getValue() + " corpusId:" + corpusId + " subArchive: " + subArchive);
+    	String ret = null;
+    	
+    	try{
+			Component workflowC = Utils.createComponentMetadata(workflow);
+	    	WorkflowJob workflowJob = new WorkflowJob(workflowC, corpusId, subArchive);
+	    	log.info("execute->");
+	    	ret = workflowService.execute(workflowJob);
+	    	return ret;
+    	}catch (Exception e){
+    		return ret;
+    	}   	
+    }
+  */
     
     @RequestMapping(value=WorkFlowREST.getStatus, method=RequestMethod.POST,  produces = "application/json")
     @ResponseBody

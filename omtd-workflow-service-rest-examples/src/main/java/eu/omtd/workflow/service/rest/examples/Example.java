@@ -42,7 +42,8 @@ public class Example {
 			// test
 			//String workflowEndpoint = "http://83.212.72.105:8881/";
 			
-			String workflowEndpoint = "http://83.212.98.33:8881/";
+			//String workflowEndpoint = "http://83.212.98.33:8881/";
+			String workflowEndpoint = "http://127.0.0.1:8881/";
 			
 			String inputFolder = "/home/ilsp/Desktop/OMTDProcessingExp/";
 			String outputFolder = "/home/ilsp/Desktop/OMTDProcessingExp/";
