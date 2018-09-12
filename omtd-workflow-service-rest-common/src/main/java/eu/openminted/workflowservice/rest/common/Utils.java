@@ -35,6 +35,7 @@ public class Utils {
 		ResourceIdentifier ri = new ResourceIdentifier();
 		ri.setResourceIdentifierSchemeName(ResourceIdentifierSchemeNameEnum.fromValue(ResourceIdentifierSchemeNameEnum.OTHER.value()));
 		ri.setSchemeURI("workflowName");
+		ri.setValue(wid);
 		
 		applicationIdentifiers.add(ri);
 		ii.setResourceIdentifiers(applicationIdentifiers);
