@@ -54,7 +54,12 @@ public class WorkflowServiceClient {
 
 	public String executeJob(String wid, String corpusId, String subArchive) {
 		Component workflowMetadata = Utils.createComponentMetadata(wid);
+		System.out.println("corpusId:" + corpusId);
+		return executeJob(workflowMetadata, corpusId, subArchive);
 		
+	}
+
+	public String executeJob(Component workflowMetadata, String corpusId, String subArchive) {		
 		System.out.println("corpusId:" + corpusId);
 		
 		String json = "";
