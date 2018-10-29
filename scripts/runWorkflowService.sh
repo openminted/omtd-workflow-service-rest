@@ -6,7 +6,6 @@ jarExec="../omtd-workflow-service-rest-server/target/omtd-workflow-service-rest-
 
 # Print config file. 
 clear;
-confFile="./application.properties"
 echo $confFile
 echo "============="
 cat $confFile
